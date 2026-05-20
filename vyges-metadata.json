@@ -1,0 +1,39 @@
+{
+  "$schema": "https://vyges.com/schema/v1/vyges-metadata.schema.json",
+  "x-version": "1.0.0",
+  "name": "cf-uart",
+  "version": "0.1.0",
+  "description": "Configurable UART controller from ChipFoundry. Features: 5-9 data bits, even/odd/stick/no parity, 1-2 stop bits, line-break detection, configurable RX timeout, RX glitch filter, data-match detection, 16-byte TX/RX FIFOs with programmable thresholds, 16-bit baud prescaler, 10 IRQ sources, loopback for test. APB / AHB-Lite / Wishbone wrappers provided.",
+  "license": "Apache-2.0",
+  "maturity": "stable",
+  "target": ["asic", "fpga"],
+  "design_type": ["digital", "peripheral", "communication"],
+  "created": "2026-05-20T21:38:52Z",
+  "updated": "2026-05-20T21:38:52Z",
+  "source": {
+    "type": "git",
+    "url": "https://github.com/chipfoundry/CF_UART",
+    "commit": "00c0da0ccd857e695a485b85e0c8619ea8ec359d",
+    "private": false,
+    "containsEncryptedPayload": false,
+    "indexing": true
+  },
+  "maintainers": [
+    {
+      "name": "Vyges",
+      "url": "https://vyges.com",
+      "github": "vyges"
+    }
+  ],
+  "interfaces": [
+    {"type": "clock", "direction": "input", "protocol": "generic", "port": "clk_i", "width": 1, "description": "System clock"},
+    {"type": "reset", "direction": "input", "protocol": "generic", "port": "rst_i", "width": 1, "description": "Synchronous reset (active high)"},
+    {"type": "bus", "direction": "slave", "protocol": "wishbone-b4", "port": "wbs_*", "description": "Wishbone B4 classic slave (CF_UART_WB wrapper)"},
+    {"type": "bus", "direction": "slave", "protocol": "apb", "port": "PADDR/PWDATA/PSEL/PENABLE/...", "description": "APB slave (CF_UART_APB wrapper)"},
+    {"type": "bus", "direction": "slave", "protocol": "ahb-lite", "port": "HADDR/HWDATA/HSEL/HTRANS/...", "description": "AHB-Lite slave (CF_UART_AHBL wrapper)"},
+    {"type": "io", "direction": "input", "port": "rx", "width": 1, "description": "UART receive line"},
+    {"type": "io", "direction": "output", "port": "tx", "width": 1, "description": "UART transmit line"},
+    {"type": "interrupt", "direction": "output", "port": "irq", "width": 1, "description": "Aggregated IRQ output (10 sources)"}
+  ],
+  "tags": ["uart", "serial", "peripheral", "chipfoundry", "sky130"]
+}

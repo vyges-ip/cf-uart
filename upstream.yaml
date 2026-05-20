@@ -1,0 +1,38 @@
+schema_version: "vyges-upstream-v1"
+upstream:
+  type: "standalone"
+  repo: https://github.com/chipfoundry/CF_UART
+  branch: main
+  commit: 00c0da0ccd857e695a485b85e0c8619ea8ec359d
+  extracted_at: "2026-05-20T21:38:52Z"
+import:
+  rtl:
+    - path: "hdl"
+      map_to: "hdl"
+  ip:
+    - path: "ip"
+      map_to: "ip"
+  docs:
+    - path: "docs"
+      map_to: "docs"
+  verify:
+    - path: "verify"
+      map_to: "verify"
+  fw:
+    - path: "fw"
+      map_to: "fw"
+  license:
+    - path: "LICENSE"
+  readme:
+    - path: "README.md"
+exclude:
+  - ".git"
+  - ".github"
+license:
+  spdx: Apache-2.0
+  file: LICENSE
+metadata_locked: false
+notes: |
+  ChipFoundry is the successor org to Efabless (Efabless was shut down).
+  CF_UART (Original Copyright 2024 Efabless Corp.) is now maintained by
+  ChipFoundry. Apache 2.0 license preserved.
