@@ -26,14 +26,18 @@
     }
   ],
   "interfaces": [
-    {"type": "clock", "direction": "input", "protocol": "generic", "port": "clk_i", "width": 1, "description": "System clock"},
-    {"type": "reset", "direction": "input", "protocol": "generic", "port": "rst_i", "width": 1, "description": "Synchronous reset (active high)"},
-    {"type": "bus", "direction": "slave", "protocol": "wishbone-b4", "port": "wbs_*", "description": "Wishbone B4 classic slave (CF_UART_WB wrapper)"},
-    {"type": "bus", "direction": "slave", "protocol": "apb", "port": "PADDR/PWDATA/PSEL/PENABLE/...", "description": "APB slave (CF_UART_APB wrapper)"},
-    {"type": "bus", "direction": "slave", "protocol": "ahb-lite", "port": "HADDR/HWDATA/HSEL/HTRANS/...", "description": "AHB-Lite slave (CF_UART_AHBL wrapper)"},
+    {"type": "clock", "direction": "input", "protocol": "generic", "port": "clk", "width": 1, "description": "System clock for bare core CF_UART (wrappers map to clk_i/PCLK/HCLK)"},
+    {"type": "reset", "direction": "input", "protocol": "generic", "port": "rst_n", "polarity": "active_low", "width": 1, "description": "Bare core CF_UART asynchronous active-low reset"},
+    {"type": "bus", "direction": "slave", "protocol": "wishbone", "port": "clk_i/rst_i/adr_i/dat_i/dat_o/sel_i/cyc_i/stb_i/ack_o/we_i", "description": "Wishbone classic slave (CF_UART_WB wrapper). clk_i clock, rst_i synchronous active-high reset, 32-bit adr_i/dat_i/dat_o, 4-bit sel_i, cyc_i/stb_i/we_i, ack_o."},
+    {"type": "bus", "direction": "slave", "protocol": "apb", "port": "PCLK/PRESETn/PADDR/PWDATA/PSEL/PENABLE/PWRITE/PREADY/PRDATA", "description": "APB slave (CF_UART_APB wrapper). PCLK clock, PRESETn active-low reset, 32-bit PADDR/PWDATA/PRDATA, PSEL/PENABLE/PWRITE/PREADY."},
+    {"type": "bus", "direction": "slave", "protocol": "ahb-lite", "port": "HCLK/HRESETn/HADDR/HWDATA/HTRANS/HSEL/HREADY/HREADYOUT/HRDATA", "description": "AHB-Lite slave (CF_UART_AHBL wrapper). HCLK clock, HRESETn active-low reset, 32-bit HADDR/HWDATA/HRDATA, HTRANS/HSEL/HREADY/HREADYOUT."},
     {"type": "io", "direction": "input", "port": "rx", "width": 1, "description": "UART receive line"},
     {"type": "io", "direction": "output", "port": "tx", "width": 1, "description": "UART transmit line"},
-    {"type": "interrupt", "direction": "output", "port": "irq", "width": 1, "description": "Aggregated IRQ output (10 sources)"}
+    {"type": "interrupt", "direction": "output", "port": "IRQ", "width": 1, "description": "Aggregated interrupt output (uppercase IRQ on all WB/APB/AHB-Lite wrappers)"}
+  ],
+  "parameters": [
+    {"name": "MDW", "type": "int", "default": 9, "description": "Maximum UART data size/width (data path width)."},
+    {"name": "SC", "type": "int", "default": 8, "description": "Number of RX oversampling samples per bit (UART_RX/UART_TX NUM_SAMPLES)."}
   ],
   "tags": ["uart", "serial", "peripheral", "chipfoundry", "sky130"]
 }
