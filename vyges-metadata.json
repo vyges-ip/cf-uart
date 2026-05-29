@@ -16,7 +16,7 @@
     "communication"
   ],
   "created": "2026-05-20T21:38:52Z",
-  "updated": "2026-05-29T16:55:18Z",
+  "updated": "2026-05-29T23:26:21Z",
   "source": {
     "type": "git",
     "url": "https://github.com/chipfoundry/CF_UART",
@@ -139,5 +139,103 @@
   },
   "dependencies": [
     "cf-ip-util"
+  ],
+  "registers": [
+    {
+      "name": "RXDATA",
+      "offset": "0x00",
+      "access": "RO",
+      "description": "RX data (pop one byte from RX FIFO)"
+    },
+    {
+      "name": "TXDATA",
+      "offset": "0x04",
+      "access": "WO",
+      "description": "TX data (push one byte to TX FIFO)"
+    },
+    {
+      "name": "PR",
+      "offset": "0x08",
+      "access": "RW",
+      "description": "Baud prescaler: divisor = clk/baud (integer)"
+    },
+    {
+      "name": "CTRL",
+      "offset": "0x0C",
+      "access": "RW",
+      "description": "Control: en[0], tx_en[1], rx_en[2], loopback[3], glitch_filter[4]"
+    },
+    {
+      "name": "CFG",
+      "offset": "0x10",
+      "access": "RW",
+      "description": "Config: data bits[3:0], parity[5:4], stop bits[8]"
+    },
+    {
+      "name": "MATCH",
+      "offset": "0x1C",
+      "access": "RW",
+      "description": "RX match value (match-interrupt compare byte)"
+    },
+    {
+      "name": "RX_FIFO_LEVEL",
+      "offset": "0xFE00",
+      "access": "RO",
+      "description": "RX FIFO occupancy (>0 => byte available)"
+    },
+    {
+      "name": "RX_FIFO_THRESHOLD",
+      "offset": "0xFE04",
+      "access": "RW",
+      "description": "RX FIFO interrupt threshold"
+    },
+    {
+      "name": "RX_FIFO_FLUSH",
+      "offset": "0xFE08",
+      "access": "WO",
+      "description": "Write 1 to flush RX FIFO"
+    },
+    {
+      "name": "TX_FIFO_LEVEL",
+      "offset": "0xFE10",
+      "access": "RO",
+      "description": "TX FIFO occupancy (< depth => space to write)"
+    },
+    {
+      "name": "TX_FIFO_THRESHOLD",
+      "offset": "0xFE14",
+      "access": "RW",
+      "description": "TX FIFO interrupt threshold"
+    },
+    {
+      "name": "TX_FIFO_FLUSH",
+      "offset": "0xFE18",
+      "access": "WO",
+      "description": "Write 1 to flush TX FIFO"
+    },
+    {
+      "name": "IM",
+      "offset": "0xFF00",
+      "access": "RW",
+      "description": "Interrupt mask"
+    },
+    {
+      "name": "MIS",
+      "offset": "0xFF04",
+      "access": "RO",
+      "description": "Masked interrupt status"
+    },
+    {
+      "name": "RIS",
+      "offset": "0xFF08",
+      "access": "RO",
+      "description": "Raw interrupt status"
+    },
+    {
+      "name": "IC",
+      "offset": "0xFF0C",
+      "access": "WO",
+      "description": "Interrupt clear (W1C)"
+    }
   ]
 }
