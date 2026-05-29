@@ -6,10 +6,17 @@
   "description": "Configurable UART controller from ChipFoundry. Features: 5-9 data bits, even/odd/stick/no parity, 1-2 stop bits, line-break detection, configurable RX timeout, RX glitch filter, data-match detection, 16-byte TX/RX FIFOs with programmable thresholds, 16-bit baud prescaler, 10 IRQ sources, loopback for test. APB / AHB-Lite / Wishbone wrappers provided.",
   "license": "Apache-2.0",
   "maturity": "stable",
-  "target": ["asic", "fpga"],
-  "design_type": ["digital", "peripheral", "communication"],
+  "target": [
+    "asic",
+    "fpga"
+  ],
+  "design_type": [
+    "digital",
+    "peripheral",
+    "communication"
+  ],
   "created": "2026-05-20T21:38:52Z",
-  "updated": "2026-05-20T21:38:52Z",
+  "updated": "2026-05-29T16:55:18Z",
   "source": {
     "type": "git",
     "url": "https://github.com/chipfoundry/CF_UART",
@@ -26,18 +33,111 @@
     }
   ],
   "interfaces": [
-    {"type": "clock", "direction": "input", "protocol": "generic", "port": "clk", "width": 1, "description": "System clock for bare core CF_UART (wrappers map to clk_i/PCLK/HCLK)"},
-    {"type": "reset", "direction": "input", "protocol": "generic", "port": "rst_n", "polarity": "active_low", "width": 1, "description": "Bare core CF_UART asynchronous active-low reset"},
-    {"type": "bus", "direction": "slave", "protocol": "wishbone", "port": "clk_i/rst_i/adr_i/dat_i/dat_o/sel_i/cyc_i/stb_i/ack_o/we_i", "description": "Wishbone classic slave (CF_UART_WB wrapper). clk_i clock, rst_i synchronous active-high reset, 32-bit adr_i/dat_i/dat_o, 4-bit sel_i, cyc_i/stb_i/we_i, ack_o."},
-    {"type": "bus", "direction": "slave", "protocol": "apb", "port": "PCLK/PRESETn/PADDR/PWDATA/PSEL/PENABLE/PWRITE/PREADY/PRDATA", "description": "APB slave (CF_UART_APB wrapper). PCLK clock, PRESETn active-low reset, 32-bit PADDR/PWDATA/PRDATA, PSEL/PENABLE/PWRITE/PREADY."},
-    {"type": "bus", "direction": "slave", "protocol": "ahb-lite", "port": "HCLK/HRESETn/HADDR/HWDATA/HTRANS/HSEL/HREADY/HREADYOUT/HRDATA", "description": "AHB-Lite slave (CF_UART_AHBL wrapper). HCLK clock, HRESETn active-low reset, 32-bit HADDR/HWDATA/HRDATA, HTRANS/HSEL/HREADY/HREADYOUT."},
-    {"type": "io", "direction": "input", "port": "rx", "width": 1, "description": "UART receive line"},
-    {"type": "io", "direction": "output", "port": "tx", "width": 1, "description": "UART transmit line"},
-    {"type": "interrupt", "direction": "output", "port": "IRQ", "width": 1, "description": "Aggregated interrupt output (uppercase IRQ on all WB/APB/AHB-Lite wrappers)"}
+    {
+      "type": "clock",
+      "direction": "input",
+      "protocol": "generic",
+      "port": "clk",
+      "width": 1,
+      "description": "System clock for bare core CF_UART (wrappers map to clk_i/PCLK/HCLK)"
+    },
+    {
+      "type": "reset",
+      "direction": "input",
+      "protocol": "generic",
+      "port": "rst_n",
+      "polarity": "active_low",
+      "width": 1,
+      "description": "Bare core CF_UART asynchronous active-low reset"
+    },
+    {
+      "type": "bus",
+      "direction": "slave",
+      "protocol": "wishbone",
+      "port": "clk_i/rst_i/adr_i/dat_i/dat_o/sel_i/cyc_i/stb_i/ack_o/we_i",
+      "description": "Wishbone classic slave (CF_UART_WB wrapper). clk_i clock, rst_i synchronous active-high reset, 32-bit adr_i/dat_i/dat_o, 4-bit sel_i, cyc_i/stb_i/we_i, ack_o."
+    },
+    {
+      "type": "bus",
+      "direction": "slave",
+      "protocol": "apb",
+      "port": "PCLK/PRESETn/PADDR/PWDATA/PSEL/PENABLE/PWRITE/PREADY/PRDATA",
+      "description": "APB slave (CF_UART_APB wrapper). PCLK clock, PRESETn active-low reset, 32-bit PADDR/PWDATA/PRDATA, PSEL/PENABLE/PWRITE/PREADY."
+    },
+    {
+      "type": "bus",
+      "direction": "slave",
+      "protocol": "ahb-lite",
+      "port": "HCLK/HRESETn/HADDR/HWDATA/HTRANS/HSEL/HREADY/HREADYOUT/HRDATA",
+      "description": "AHB-Lite slave (CF_UART_AHBL wrapper). HCLK clock, HRESETn active-low reset, 32-bit HADDR/HWDATA/HRDATA, HTRANS/HSEL/HREADY/HREADYOUT."
+    },
+    {
+      "type": "io",
+      "direction": "input",
+      "port": "rx",
+      "width": 1,
+      "description": "UART receive line"
+    },
+    {
+      "type": "io",
+      "direction": "output",
+      "port": "tx",
+      "width": 1,
+      "description": "UART transmit line"
+    },
+    {
+      "type": "interrupt",
+      "direction": "output",
+      "port": "IRQ",
+      "width": 1,
+      "description": "Aggregated interrupt output (uppercase IRQ on all WB/APB/AHB-Lite wrappers)"
+    }
   ],
   "parameters": [
-    {"name": "MDW", "type": "int", "default": 9, "description": "Maximum UART data size/width (data path width)."},
-    {"name": "SC", "type": "int", "default": 8, "description": "Number of RX oversampling samples per bit (UART_RX/UART_TX NUM_SAMPLES)."}
+    {
+      "name": "MDW",
+      "type": "int",
+      "default": 9,
+      "description": "Maximum UART data size/width (data path width)."
+    },
+    {
+      "name": "SC",
+      "type": "int",
+      "default": 8,
+      "description": "Number of RX oversampling samples per bit (UART_RX/UART_TX NUM_SAMPLES)."
+    }
   ],
-  "tags": ["uart", "serial", "peripheral", "chipfoundry", "sky130"]
+  "tags": [
+    "uart",
+    "serial",
+    "peripheral",
+    "chipfoundry",
+    "sky130"
+  ],
+  "integration": {
+    "soc_generator_hints": {
+      "top_module": "CF_UART_APB",
+      "clock": {
+        "port": "PCLK"
+      },
+      "reset": {
+        "port": "PRESETn"
+      },
+      "bus_slave": {
+        "addr_width": 32,
+        "ports": {
+          "psel": "PSEL",
+          "penable": "PENABLE",
+          "pwrite": "PWRITE",
+          "paddr": "PADDR",
+          "pwdata": "PWDATA",
+          "prdata": "PRDATA",
+          "pready": "PREADY"
+        }
+      }
+    }
+  },
+  "dependencies": [
+    "cf-ip-util"
+  ]
 }
