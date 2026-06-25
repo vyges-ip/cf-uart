@@ -16,7 +16,7 @@
     "communication"
   ],
   "created": "2026-05-20T21:38:52Z",
-  "updated": "2026-05-29T23:26:21Z",
+  "updated": "2026-06-25T03:34:07Z",
   "source": {
     "type": "git",
     "url": "https://github.com/chipfoundry/CF_UART",
@@ -34,63 +34,121 @@
   ],
   "interfaces": [
     {
+      "name": "clock",
       "type": "clock",
       "direction": "input",
-      "protocol": "generic",
-      "port": "clk",
-      "width": 1,
-      "description": "System clock for bare core CF_UART (wrappers map to clk_i/PCLK/HCLK)"
+      "signals": [
+        {
+          "name": "clk_i",
+          "direction": "input",
+          "type": "clock",
+          "width": 1
+        }
+      ]
     },
     {
+      "name": "reset",
       "type": "reset",
       "direction": "input",
-      "protocol": "generic",
-      "port": "rst_n",
-      "polarity": "active_low",
-      "width": 1,
-      "description": "Bare core CF_UART asynchronous active-low reset"
+      "signals": [
+        {
+          "name": "rst_ni",
+          "direction": "input",
+          "type": "reset",
+          "width": 1,
+          "active_level": "low"
+        }
+      ]
     },
     {
+      "name": "apb",
       "type": "bus",
-      "direction": "slave",
-      "protocol": "wishbone",
-      "port": "clk_i/rst_i/adr_i/dat_i/dat_o/sel_i/cyc_i/stb_i/ack_o/we_i",
-      "description": "Wishbone classic slave (CF_UART_WB wrapper). clk_i clock, rst_i synchronous active-high reset, 32-bit adr_i/dat_i/dat_o, 4-bit sel_i, cyc_i/stb_i/we_i, ack_o."
-    },
-    {
-      "type": "bus",
-      "direction": "slave",
       "protocol": "apb",
-      "port": "PCLK/PRESETn/PADDR/PWDATA/PSEL/PENABLE/PWRITE/PREADY/PRDATA",
-      "description": "APB slave (CF_UART_APB wrapper). PCLK clock, PRESETn active-low reset, 32-bit PADDR/PWDATA/PRDATA, PSEL/PENABLE/PWRITE/PREADY."
-    },
-    {
-      "type": "bus",
       "direction": "slave",
-      "protocol": "ahb-lite",
-      "port": "HCLK/HRESETn/HADDR/HWDATA/HTRANS/HSEL/HREADY/HREADYOUT/HRDATA",
-      "description": "AHB-Lite slave (CF_UART_AHBL wrapper). HCLK clock, HRESETn active-low reset, 32-bit HADDR/HWDATA/HRDATA, HTRANS/HSEL/HREADY/HREADYOUT."
+      "description": "APB4 slave (via the vyges_cf_uart_apb overlay).",
+      "signals": [
+        {
+          "name": "PADDR",
+          "direction": "input",
+          "type": "address",
+          "width": 32
+        },
+        {
+          "name": "PWRITE",
+          "direction": "input",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PWDATA",
+          "direction": "input",
+          "type": "data",
+          "width": 32
+        },
+        {
+          "name": "PSEL",
+          "direction": "input",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PENABLE",
+          "direction": "input",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PREADY",
+          "direction": "output",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PRDATA",
+          "direction": "output",
+          "type": "data",
+          "width": 32
+        }
+      ]
     },
     {
+      "name": "uart_rx",
       "type": "io",
       "direction": "input",
-      "port": "rx",
-      "width": 1,
-      "description": "UART receive line"
+      "signals": [
+        {
+          "name": "rx",
+          "direction": "input",
+          "type": "data",
+          "width": 1
+        }
+      ]
     },
     {
+      "name": "uart_tx",
       "type": "io",
       "direction": "output",
-      "port": "tx",
-      "width": 1,
-      "description": "UART transmit line"
+      "signals": [
+        {
+          "name": "tx",
+          "direction": "output",
+          "type": "data",
+          "width": 1
+        }
+      ]
     },
     {
+      "name": "irq",
       "type": "interrupt",
       "direction": "output",
-      "port": "IRQ",
-      "width": 1,
-      "description": "Aggregated interrupt output (uppercase IRQ on all WB/APB/AHB-Lite wrappers)"
+      "signals": [
+        {
+          "name": "IRQ",
+          "direction": "output",
+          "type": "interrupt",
+          "width": 1
+        }
+      ]
     }
   ],
   "parameters": [
@@ -116,7 +174,7 @@
   ],
   "integration": {
     "soc_generator_hints": {
-      "top_module": "CF_UART_APB",
+      "top_module": "vyges_cf_uart_apb",
       "clock": {
         "port": "PCLK"
       },
@@ -134,7 +192,8 @@
           "prdata": "PRDATA",
           "pready": "PREADY"
         }
-      }
+      },
+      "note": "Vyges overlay vyges_cf_uart_apb (vyges-additions/) presents clk_i/rst_ni + a clean APB4 slave + rx/tx/IRQ; wraps CF_UART_APB (clk_i->PCLK, rst_ni->PRESETn). Generic generator wires it with no IP-specific handling."
     }
   },
   "dependencies": [
