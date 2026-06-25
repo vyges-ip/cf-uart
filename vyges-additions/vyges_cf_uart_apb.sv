@@ -5,7 +5,7 @@
 // Presents the SoC-standard peripheral interface (clk_i / rst_ni + a clean APB4
 // slave + rx/tx/IRQ) so the *generic* Vyges SoC generator wires it like any other
 // peripheral — keeping IP-specific handling OUT of the generator. Maps
-// clk_i -> PCLK, rst_ni (active-low) -> PRESETn, and ties off the DFT pin.
+// clk_i -> PCLK, rst_ni (active-low) -> PRESETn.
 // Works around upstream CF_UART metadata exposing 3 slash-joined bus variants
 // (WB/APB/AHBL) and PCLK/PRESETn (not clk_i/rst_ni).
 module vyges_cf_uart_apb (
@@ -25,7 +25,6 @@ module vyges_cf_uart_apb (
   output wire        IRQ
 );
   CF_UART_APB u_cf_uart_apb (
-    .sc_testmode (1'b0),       // DFT scan disabled in functional integration
     .PCLK        (clk_i),
     .PRESETn     (rst_ni),
     .PADDR       (PADDR),
