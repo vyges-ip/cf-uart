@@ -176,10 +176,10 @@
     "soc_generator_hints": {
       "top_module": "vyges_cf_uart_apb",
       "clock": {
-        "port": "PCLK"
+        "port": "clk_i"
       },
       "reset": {
-        "port": "PRESETn"
+        "port": "rst_ni"
       },
       "bus_slave": {
         "addr_width": 32,
