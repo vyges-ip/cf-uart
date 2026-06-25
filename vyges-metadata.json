@@ -197,7 +197,12 @@
     }
   },
   "dependencies": [
-    "cf-ip-util"
+    {
+      "name": "cf-ip-util",
+      "scope": [
+        "rtl"
+      ]
+    }
   ],
   "registers": [
     {
