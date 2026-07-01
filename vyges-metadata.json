@@ -16,7 +16,7 @@
     "communication"
   ],
   "created": "2026-05-20T21:38:52Z",
-  "updated": "2026-06-25T03:34:07Z",
+  "updated": "2026-07-01T20:53:09Z",
   "source": {
     "type": "git",
     "url": "https://github.com/chipfoundry/CF_UART",
@@ -203,6 +203,13 @@
         "rtl"
       ]
     }
+  ],
+  "rtl_files": [
+    "hdl/rtl/CF_UART.v",
+    "hdl/rtl/bus_wrappers/CF_UART_AHBL.v",
+    "hdl/rtl/bus_wrappers/CF_UART_APB.v",
+    "hdl/rtl/bus_wrappers/CF_UART_WB.v",
+    "vyges-additions/vyges_cf_uart_apb.sv"
   ],
   "registers": [
     {
