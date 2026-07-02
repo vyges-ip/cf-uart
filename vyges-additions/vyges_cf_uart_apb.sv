@@ -2,23 +2,22 @@
 //
 // vyges_cf_uart_apb — Vyges integration overlay for ChipFoundry CF_UART_APB.
 //
-// Presents the SoC-standard peripheral interface (clk_i / rst_ni + a clean APB4
-// slave + rx/tx/IRQ) so the *generic* Vyges SoC generator wires it like any other
-// peripheral — keeping IP-specific handling OUT of the generator. Maps
-// clk_i -> PCLK, rst_ni (active-low) -> PRESETn.
-// Works around upstream CF_UART metadata exposing 3 slash-joined bus variants
-// (WB/APB/AHBL) and PCLK/PRESETn (not clk_i/rst_ni).
+// Presents the SoC-standard peripheral interface so the *generic* Vyges SoC
+// generator wires it like any other APB slave — keeping IP-specific handling
+// OUT of the generator. Exposes the Vyges APB-slave contract (lowercase _i/_o,
+// same as fft/mag_phase/temp/humidistat) and maps to CF_UART_APB's AMBA-style
+// PCLK/PRESETn/PSEL/... ports internally. clk_i -> PCLK, rst_ni -> PRESETn.
 module vyges_cf_uart_apb (
   input  wire        clk_i,
   input  wire        rst_ni,
-  // APB4 slave
-  input  wire [31:0] PADDR,
-  input  wire        PWRITE,
-  input  wire [31:0] PWDATA,
-  input  wire        PSEL,
-  input  wire        PENABLE,
-  output wire        PREADY,
-  output wire [31:0] PRDATA,
+  // APB4 slave — Vyges contract (lowercase _i/_o)
+  input  wire        psel_i,
+  input  wire        penable_i,
+  input  wire        pwrite_i,
+  input  wire [31:0] paddr_i,
+  input  wire [31:0] pwdata_i,
+  output wire [31:0] prdata_o,
+  output wire        pready_o,
   // UART IO + interrupt
   input  wire        rx,
   output wire        tx,
@@ -27,13 +26,13 @@ module vyges_cf_uart_apb (
   CF_UART_APB u_cf_uart_apb (
     .PCLK        (clk_i),
     .PRESETn     (rst_ni),
-    .PADDR       (PADDR),
-    .PWRITE      (PWRITE),
-    .PWDATA      (PWDATA),
-    .PSEL        (PSEL),
-    .PENABLE     (PENABLE),
-    .PREADY      (PREADY),
-    .PRDATA      (PRDATA),
+    .PADDR       (paddr_i),
+    .PWRITE      (pwrite_i),
+    .PWDATA      (pwdata_i),
+    .PSEL        (psel_i),
+    .PENABLE     (penable_i),
+    .PREADY      (pready_o),
+    .PRDATA      (prdata_o),
     .IRQ         (IRQ),
     .rx          (rx),
     .tx          (tx)
